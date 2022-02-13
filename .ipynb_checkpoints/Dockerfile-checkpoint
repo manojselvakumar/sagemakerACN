@@ -13,6 +13,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
          python3-setuptools \
          nginx \
          ca-certificates \
+         libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
@@ -23,7 +24,7 @@ RUN ln -s /usr/bin/pip3 /usr/bin/pip
 # linking them together. Likewise, pip leaves the install caches populated which uses
 # a significant amount of space. These optimizations save a fair amount of space in the
 # image, which reduces start up time.
-RUN pip --no-cache-dir install numpy==1.16.2 scipy==1.2.1 scikit-learn==0.20.2 pandas flask gunicorn
+RUN pip --no-cache-dir install numpy==1.16.2 scipy==1.2.1 scikit-learn==0.20.2 xgboost==0.90 pandas flask gunicorn
 
 # Set some environment variables. PYTHONUNBUFFERED keeps Python from buffering our standard
 # output stream, which means that logs can be delivered to the user quickly. PYTHONDONTWRITEBYTECODE
@@ -33,6 +34,7 @@ RUN pip --no-cache-dir install numpy==1.16.2 scipy==1.2.1 scikit-learn==0.20.2 p
 
 ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE
+
 
 ENV PATH="/opt/ml/code:${PATH}"
 
